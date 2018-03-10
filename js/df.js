@@ -1,3 +1,18 @@
+var t = [
+  { data: { id: 'a' } },
+  { data: { id: 'b' } },
+  { data: { id: 'c' } },
+  { data: { id: 'd' } },
+  { data: { id: 'e' } }
+];
+var l = [
+  { data: { id: 'a => e', weight: 1, source: 'a', target: 'e' } },
+  { data: { id: 'a => b', weight: 3, source: 'a', target: 'b' } }
+];
+
+//document.getElementById("t").innerHTML = t;
+
+//Grapho functionality
 var grapho = cytoscape({
   container: document.getElementById('grapho'),
 
@@ -27,23 +42,8 @@ var grapho = cytoscape({
       }),
 
   elements: {
-      nodes: [
-        { data: { id: 'a' } },
-        { data: { id: 'b' } },
-        { data: { id: 'c' } },
-        { data: { id: 'd' } },
-        { data: { id: 'e' } }
-      ],
-
-      edges: [
-        { data: { id: 'ae', weight: 1, source: 'a', target: 'e' } },
-        { data: { id: 'ab', weight: 3, source: 'a', target: 'b' } },
-        { data: { id: 'be', weight: 4, source: 'b', target: 'e' } },
-        { data: { id: 'bc', weight: 5, source: 'b', target: 'c' } },
-        { data: { id: 'ce', weight: 6, source: 'c', target: 'e' } },
-        { data: { id: 'cd', weight: 2, source: 'c', target: 'd' } },
-        { data: { id: 'de', weight: 7, source: 'd', target: 'e' } }
-      ]
+      nodes: t,
+      edges: l
     },
 
   layout: {
@@ -58,7 +58,7 @@ var bfs = grapho.elements().bfs('#a', function(){}, true);
 
 var i = 0;
 var highlightNextEle = function(){
-  if( i <= bfs.path.length ){
+  if( i < bfs.path.length ){
     bfs.path[i].addClass('highlighted');
 
     i++;
@@ -68,3 +68,11 @@ var highlightNextEle = function(){
 
 // kick off first highlight
 highlightNextEle();
+
+var app = new Vue({
+  el: "#app",
+  data : {
+    atributes: t,
+    dependencies: l
+  }
+});

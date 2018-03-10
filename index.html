@@ -8,17 +8,22 @@
 	<title>Animated BFS</title>
 
 	<script src="js/cytoscape.min.js"></script>
-	</head>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+  </head>
 
-	<body>
-    <div>
+	<body >
+    <div id="app">
       <div>
-        T = {<span id="t"></span>}
+        T = { 
+        <span v-for="atribute in atributes">{{ atribute.data.id }} 
+          <i v-if="atribute.data.id != atributes[atributes.length -  1].data.id">,</i>
+        </span> }
       </div>
       <div>
         D = {
-        <span id="l">
-          <i></i>
+        <span v-for="dependency in dependencies">
+          {{ dependency.data.id }}
+          <i v-if="dependency.data.id != dependencies[dependencies.length -1].data.id">,</i>
         </span> 
         }
       </div>
