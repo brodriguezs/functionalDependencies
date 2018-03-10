@@ -1,16 +1,32 @@
 var t = [
-  { data: { id: 'a' } },
-  { data: { id: 'b' } },
-  { data: { id: 'c' } },
-  { data: { id: 'd' } },
-  { data: { id: 'e' } }
+  { data: { id: 'N' } },
+  { data: { id: 'A' } },
+  { data: { id: 'E' } },
+  { data: { id: 'C' } },
+  { data: { id: 'F' } },
+  { data: { id: 'I' } },
+  { data: { id: 'P' } },
+  { data: { id: 'D' } },
+  { data: { id: 'T' } },
+  { data: { id: 'S' } }
 ];
 var l = [
-  { data: { id: 'a => e', weight: 1, source: 'a', target: 'e' } },
-  { data: { id: 'a => b', weight: 3, source: 'a', target: 'b' } }
+  {implicante:"NA", implicado:"C"}, // NA => C
+  {implicante:"CF", implicado:"SNA"},
+  {implicante:"E", implicado:"NA"},
+  {implicante:"I", implicado:"D"},
+  {implicante:"I", implicado:"NA"},
+  {implicante:"C", implicado:"S"},
+  {implicante:"C", implicado:"E"},
+  {implicante:"NA", implicado:"C"},
+  {implicante:"T", implicado:"NA"}
 ];
 
-//document.getElementById("t").innerHTML = t;
+var edges = [
+  { data: { id: 'NA => C', weight: 1, source: 'N', target: 'C' } },
+  { data: { id: 'CF => SNA', weight: 2, source: 'C', target: 'S' } },
+  { data: { id: 'CF => SNA', weight: 2, source: 'C', target: 'S' } },
+];
 
 //Grapho functionality
 var grapho = cytoscape({
@@ -43,7 +59,7 @@ var grapho = cytoscape({
 
   elements: {
       nodes: t,
-      edges: l
+      edges: edges
     },
 
   layout: {
@@ -60,7 +76,6 @@ var i = 0;
 var highlightNextEle = function(){
   if( i < bfs.path.length ){
     bfs.path[i].addClass('highlighted');
-
     i++;
     setTimeout(highlightNextEle, 1000);
   }
