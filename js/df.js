@@ -10,6 +10,7 @@ var t = [
   { data: { id: 'T' } },
   { data: { id: 'S' } }
 ];
+
 var l = [
   {implicante:"NA", implicado:"C"}, // NA => C
   {implicante:"CF", implicado:"SNA"},
@@ -22,11 +23,21 @@ var l = [
   {implicante:"T", implicado:"NA"}
 ];
 
-var edges = [
-  { data: { id: 'NA => C', weight: 1, source: 'N', target: 'C' } },
-  { data: { id: 'CF => SNA', weight: 2, source: 'C', target: 'S' } },
-  { data: { id: 'CF => SNA', weight: 2, source: 'C', target: 'S' } },
-];
+var edges = [];
+
+l.map(el => {
+  let anteArr = el.implicante.split("");
+  let adoArr = el.implicado.split(""); 
+
+  anteArr.map((eachAnte, indexAnte, self) =>{
+    adoArr.map((eachAdo, indexAdo, self) =>{
+      edges.push({data:{ id: `${eachAdo}=>${eachAdo}*${indexAnte}${indexAdo}`, weight:1, source: `${eachAnte}`, target: `${eachAdo}`}}) 
+    }) 
+  })
+})
+
+console.log("EDGES");
+console.log(edges);
 
 //Grapho functionality
 var grapho = cytoscape({
