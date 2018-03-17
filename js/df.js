@@ -1,3 +1,6 @@
+//
+// Loading input Data
+//
 var t = [
   { data: { id: 'N' , position: { x: 215, y: 85 }}},
   { data: { id: 'A' , position: { x: 230, y: 20 }}},
@@ -25,6 +28,7 @@ var l = [
 
 var edges = [];
 
+
 l.map(el => {
   let anteArr = el.implicante.split("");
   let adoArr = el.implicado.split(""); 
@@ -39,7 +43,9 @@ l.map(el => {
 console.log("EDGES");
 console.log(edges);
 
+//
 //Grapho functionality
+//
 var grapho = cytoscape({
   container: document.getElementById('grapho'),
 
@@ -95,16 +101,7 @@ var highlightNextEle = function(){
 // kick off first highlight
 highlightNextEle();
 
-var app = new Vue({
-  el: "#app",
-  data : {
-    atributes: t,
-    dependencies: l
-  }
-});
-
-
-
+//
 // DF lib functions
 //
 function k_combinations(set, k) {
@@ -397,10 +394,10 @@ var candidate_keys_of = function(a_keys, kva_fds){
   return candidate_keys;
 }
 
-// Some methods extending array funcionalities
+//
+// Some methods extending array funcionalities and for Testing purposes
 //
 
-// attach the .equals method to Array's prototype to call it on any array
 Array.prototype.equals = function (array) {
     // if the other array is a falsy value, return
     if (!array)
@@ -425,7 +422,6 @@ Array.prototype.equals = function (array) {
     return true;
 }
 
-// attach the .equals method to Array's prototype to call it on any array
 Array.prototype.proper_subset = function (array) {
     // if the other array is a falsy value, return
     if (!array)
@@ -443,7 +439,6 @@ Array.prototype.proper_subset = function (array) {
     return true;
 }
 
-// attach the .equals method to Array's prototype to call it on any array
 Array.prototype.subset = function (array) {
     // if the other array is a falsy value, return
     if (!array)
@@ -461,7 +456,6 @@ Array.prototype.subset = function (array) {
     return true;
 }
 
-// attach the .equals method to Array's prototype to call it on any array
 Array.prototype.is_subset_of = function (array) {
     // if the other array is a falsy value, return
     if (!array)
@@ -479,7 +473,9 @@ Array.prototype.is_subset_of = function (array) {
     return true;
 }
 
+//
 // attach the .equals method to Array's prototype to call it on any array
+//
 Array.prototype.includes_fd = function (element) {
     // if the other array is a falsy value, return
     if (!element)
@@ -496,7 +492,9 @@ Array.prototype.includes_fd = function (element) {
     return false;
 }
 
+//
 // attach the .equals method to Array's prototype to call it on any array
+// 
 Array.prototype.merge = function (that) {
     var this_index = 0;
     var that_index = 0;
@@ -512,28 +510,81 @@ Array.prototype.merge = function (that) {
 }
 
 
-// Defining dependency elements and exec
 //
-var T = [];
-var L = [];
+// VUE APP
+//
 
-t.forEach(el =>{
- T.push(el.data.id); 
+var recmin = [];
+
+var app = new Vue({
+  el: "#app",
+  data : {
+    atributes: t,
+    dependencies: l,
+    recminimal: recmin
+  },
+  methods: {
+    calculateMinCover: function () {
+      this.recminimal = [];
+
+      console.log("Calculating Minimal covering");
+      var R = preparingData(t,l);
+
+      let min_cover = minimal_cover(R.T,R.L);
+      this.recminimal = formatDependency(min_cover);
+      console.log(this.recminimal);
+    },
+    calculateKeys(){
+      alert("función en construcción!");
+    }
+  }
 });
 
-console.log("T Set:");
-console.log(T);
+var formatDependency = function(df){
+  let recmin = [];
+  df.forEach(el => {
+    let ante = [];
+    let ado = [];
 
-l.map(el => {
-  let anteArr = el.implicante.split("");
-  let adoArr = el.implicado.split(""); 
-  let df = [];
-  df.push(anteArr,adoArr);
-  L.push(df);
-})
+    console.log(el);
 
-console.log("L Set:");
-console.log(L);
+    ante.push(el[0].join(''));
+    console.log(ante);
 
-var min_cover = minimal_cover(T,L);
-console.log(min_cover);
+    ado.push(el[1].join(''));
+    console.log(ado);
+
+    recmin.push({ implicante:ante[0], implicado:ado[0]});
+  });
+  return recmin;
+}
+
+//
+// Defining dependency elements and exec
+//
+var preparingData = function(setT, setL){
+  let T = [];
+  let L = [];
+
+  // Preparing set T of atributes
+  setT.forEach(el =>{
+   T.push(el.data.id); 
+  });
+
+  console.log("T Set:");
+  console.log(T);
+
+  // Conforming the new L set with the dF in an array of arrays
+  setL.forEach(el => {
+    let anteArr = el.implicante.split("");
+    let adoArr = el.implicado.split(""); 
+    let df = [];
+
+    df.push(anteArr,adoArr);
+    L.push(df);
+  })
+
+  console.log("L Set:");
+  console.log(L);
+  return {T,L}
+}

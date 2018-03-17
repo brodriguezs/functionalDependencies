@@ -27,15 +27,24 @@
         </span> 
         }
       </div>
-    </div>
-    <div>
-      <button v-on:click="calculateMinimalCover()">
-       Calcular recubrimiento 
-      </button>
-      <button v-on:click="calculateMinimalCover()">
-       Calcular llaves 
-      </button>
-    </div>
+      <div v-if="recminimal">
+        Recubrimiento minimal= {
+        <span v-for="(recmin_, index) in recminimal">
+          {{ recmin_.implicante }} => {{ recmin_.implicado}}
+          <i >,</i>
+        </span> 
+        }
+      </div>
+
+      <div>
+        <button v-on:click="calculateMinCover">
+         Calcular recubrimiento 
+        </button>
+        <button v-on:click="calculateKeys">
+         Calcular llaves 
+        </button>
+      </div>
+          </div>
 		<div id="grapho"></div>
 		<!-- Load appplication code at the end to ensure DOM is loaded -->
 		<script src="js/df.js"></script>
